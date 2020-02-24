@@ -28,7 +28,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
     controller.forward();
     controller2 = AnimationController(
         duration: Duration(
-          milliseconds: 2500),
+          milliseconds: 2000),
         vsync: this
     );
     animation2 = CurvedAnimation(
@@ -52,7 +52,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
                 child: FadeTransition(
                   opacity: animation2,
                   child: FlareActor(
-                    'assets/splashlogo.flr',
+                    'assets/logo.flr',
                     animation: 'loading'
                   )
                 )
@@ -103,7 +103,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      onPressed: () {}, //callback when button is clicked
+                      onPressed: () => Navigator.pushNamed(context, 'signup'), //callback when button is clicked
                       borderSide: BorderSide(
                         color: Colors.grey, //Color of the border
                         style: BorderStyle.solid, //Style of the border
