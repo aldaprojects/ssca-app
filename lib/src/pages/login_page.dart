@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         color: Colors.blue,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                         child: Container(
-                          width: 320,
+                          width: MediaQuery.of(context).size.width * .8,
                           child: Text(
                             'Iniciar Sesión',
                             style: TextStyle(color: Colors.white),

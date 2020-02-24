@@ -108,7 +108,7 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                         color: Colors.blue,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                         child: Container(
-                          width: 320,
+                          width: MediaQuery.of(context).size.width * .8,
                           child: Text(
                             'Crear Cuenta',
                             style: TextStyle(color: Colors.white),
