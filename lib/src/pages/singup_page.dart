@@ -13,14 +13,12 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
 
   AnimationController controller;
   Animation<double> animation;
-  AnimationController controller2;
-  Animation<double> animation2;
 
   initState() {
     super.initState();
     controller = AnimationController(
         duration: Duration(
-          milliseconds: 1500),
+          milliseconds: 500),
         vsync: this
     );
     animation = CurvedAnimation(
@@ -28,16 +26,6 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
       curve: Curves.easeIn
     );
     controller.forward();
-    controller2 = AnimationController(
-        duration: Duration(
-          milliseconds: 2500),
-        vsync: this
-    );
-    animation2 = CurvedAnimation(
-      parent: controller2, 
-      curve: Curves.easeIn
-    );
-    controller2.forward();
   }
 
   Widget build(BuildContext context) {
@@ -48,15 +36,15 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
                   child: Column(
                     children: <Widget>[
                       Container(
-                        height: 230,
-                        width: 300,
+                        height: 300,
                         child: FadeTransition(
-                          opacity: animation2,
+                          opacity: animation,
                           child: FlareActor(
                             'assets/SignUp.flr',
                             animation: 'relax'
@@ -71,44 +59,46 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Column(
-                    children: <Widget>[
-                      TextField(
-                        textCapitalization: TextCapitalization.characters,
-                        decoration: InputDecoration(
-                          labelText: 'Nombre completo',
-                          suffixIcon: Icon(FontAwesomeIcons.user)
+                  child: Form(
+                    child: Column(
+                      children: <Widget>[
+                        TextField(
+                          textCapitalization: TextCapitalization.characters,
+                          decoration: InputDecoration(
+                            labelText: 'Nombre completo',
+                            suffixIcon: Icon(FontAwesomeIcons.user)
+                          ),
                         ),
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Apodo',
-                          suffixIcon: Icon(FontAwesomeIcons.userAlt)
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Apodo',
+                            suffixIcon: Icon(FontAwesomeIcons.userAlt)
+                          ),
                         ),
-                      ),
-                      TextField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: 'Correo',
-                          suffixIcon: Icon(FontAwesomeIcons.at)
+                        TextField(
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            labelText: 'Correo',
+                            suffixIcon: Icon(FontAwesomeIcons.at)
+                          ),
                         ),
-                      ),
-                      TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Contraseña',
-                          suffixIcon: Icon(FontAwesomeIcons.key)
+                        TextField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Contraseña',
+                            suffixIcon: Icon(FontAwesomeIcons.key)
+                          ),
                         ),
-                      ),
-                      TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Confirmar contraseña',
-                          suffixIcon: Icon(FontAwesomeIcons.key)
+                        TextField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Confirmar contraseña',
+                            suffixIcon: Icon(FontAwesomeIcons.key)
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 25.0)
-                    ],
+                        SizedBox(height: 25.0)
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -125,7 +115,7 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        onPressed: (){}
+                        onPressed: ()=> Navigator.pushNamed(context, 'home')
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
