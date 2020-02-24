@@ -5,11 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
-class SingUpPage extends StatefulWidget {
-  _SingUpPageState createState() => _SingUpPageState();
+class LoginPage extends StatefulWidget {
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   AnimationController controller;
   Animation<double> animation;
@@ -46,14 +46,14 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                         child: FadeTransition(
                           opacity: animation,
                           child: FlareActor(
-                            'assets/SignUp.flr',
-                            animation: 'relax'
+                            'assets/SignIn.flr',
+                            animation: 'login'
                           )
                         )
                       ),
                       Text(
-                        'No hay prisa',
-                        style: TextStyle(color: Colors.grey, fontSize: 17.0))
+                        'Nos alegra que estés de vuelta',
+                        style: TextStyle(color: Colors.grey, fontSize: 14.0))
                     ],
                   ),
                 ),
@@ -62,19 +62,6 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                   child: Form(
                     child: Column(
                       children: <Widget>[
-                        TextField(
-                          textCapitalization: TextCapitalization.characters,
-                          decoration: InputDecoration(
-                            labelText: 'Nombre completo',
-                            suffixIcon: Icon(FontAwesomeIcons.user)
-                          ),
-                        ),
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText: 'Apodo',
-                            suffixIcon: Icon(FontAwesomeIcons.userAlt)
-                          ),
-                        ),
                         TextField(
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
@@ -89,16 +76,21 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                             suffixIcon: Icon(FontAwesomeIcons.key)
                           ),
                         ),
-                        TextField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            labelText: 'Confirmar contraseña',
-                            suffixIcon: Icon(FontAwesomeIcons.key)
-                          ),
-                        ),
                         SizedBox(height: 25.0)
                       ],
                     ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 17.0, right: 30.0),
+                  child: Row(
+                    children: <Widget>[
+                      Checkbox(value: false, onChanged: null),
+                      Text('Recuerdame'),
+                      Spacer(),
+                      Text('¿Olvidaste la contraseña?'),
+
+                    ],
                   ),
                 ),
                 Container(
@@ -110,7 +102,7 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                         child: Container(
                           width: 320,
                           child: Text(
-                            'Crear Cuenta',
+                            'Iniciar Sesión',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           ),
@@ -120,10 +112,10 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text('¿Ya tienes cuenta?'),
+                          Text('¿No tienes cuenta?'),
                           FlatButton(
-                            child: Text('Iniciar Sesión', style: TextStyle(color: Colors.blue),),
-                            onPressed: () => Navigator.pushNamed(context, 'login'),
+                            child: Text('Crear una', style: TextStyle(color: Colors.blue),),
+                            onPressed: () => Navigator.pushNamed(context, 'signup'),
                           )
                         ],
                       ),
