@@ -110,7 +110,7 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                         child: Container(
                           width: MediaQuery.of(context).size.width * .8,
                           child: Text(
-                            'Crear Cuenta - Aldair',
+                            'Crear Cuenta',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           ),

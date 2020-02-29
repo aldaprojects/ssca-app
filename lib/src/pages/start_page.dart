@@ -103,7 +103,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      onPressed: () => Navigator.pushNamed(context, 'signup'), //callback when button is clicked
+                      onPressed: () => Navigator.pushNamed(context, 'register'), //callback when button is clicked
                       borderSide: BorderSide(
                         color: Colors.grey, //Color of the border
                         style: BorderStyle.solid, //Style of the border
@@ -120,7 +120,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
                       Text('¿Ya tienes cuenta?'),
                       FlatButton(
                         child: Text('Iniciar Sesión', style: TextStyle(color: Colors.blue),),
-                        onPressed: (){},
+                        onPressed: () => Navigator.pushNamed(context, 'login'),
                       )
                     ],
                 ),
