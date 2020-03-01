@@ -20,6 +20,7 @@ class User {
     String email;
     String username;
     DateTime fechaRegistro;
+    String password;
 
     User({
         this.llave,
@@ -31,10 +32,11 @@ class User {
         this.email,
         this.username,
         this.fechaRegistro,
+        this.password
     });
 
     factory User.fromJson(Map<String, dynamic> json) => User(
-        llave          : json["llave"],
+        llave         : json["llave"],
         role          : json["role"],
         grupo         : json["grupo"] == null ? null : Group.fromJson(json["grupo"]),
         google        : json["google"],
@@ -45,15 +47,16 @@ class User {
         fechaRegistro : DateTime.parse(json["fecha_registro"]),
     );
 
-    Map<String, dynamic> toJson() => {
-        "llave"           : llave,
-        "role"            : role,
-        "grupo"           : grupo == null ? null : grupo.toJson(),
-        "google"          : google,
-        "_id"             : id,
+    Map<String, String> toJson() => {
+        // "llave"           : llave.toString(),
+        // "role"            : role,
+        // "grupo"           : grupo == null ? null : grupo.toJson(),
+        // "google"          : google,
+        // "_id"             : id,
         "name"            : name,
         "email"           : email,
         "username"        : username,
         "fecha_registro"  : fechaRegistro.toIso8601String(),
+        "password"        : password
     };
 }

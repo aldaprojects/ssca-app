@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 import 'package:sockets2/src/models/user_model.dart';
 import 'package:sockets2/src/providers/usuario_provider.dart';
-import 'package:sockets2/src/validators/login_validator.dart' as validatorLogin;
+import 'package:sockets2/src/validators/validators.dart' as loginValidator;
 import 'package:sockets2/src/widgets/dialog_widget.dart';
+import 'package:sockets2/src/widgets/pull_widget.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -103,7 +104,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 labelText: 'Correo',
                 suffixIcon: Icon(FontAwesomeIcons.at)
               ),
-              validator: validatorLogin.validateEmail,
+              validator: loginValidator.validateEmail,
               autovalidate: true,
             ),
             TextFormField(
@@ -113,7 +114,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 labelText: 'Contraseña',
                 suffixIcon: Icon(FontAwesomeIcons.key)
               ),
-              validator: validatorLogin.validatePassword,
+              validator: loginValidator.validatePassword,
               autovalidate: true
             ),
             SizedBox(height: 25.0)
@@ -123,7 +124,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     );  
   }
 
-  Widget _loginFooter( UsuarioProvider userProvider) {
+  Widget _loginFooter( UsuarioProvider userProvider ) {
     return  Container(
       child: Column(
         children: <Widget>[
@@ -152,7 +153,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ),
             onPressed: () async {
 
-              await _login(userProvider);
+              await showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                    contentPadding: EdgeInsets.all(0),
+                    content: Pull(
+                      future: userProvider.login(_emailController.text, _passwordController.text)
+                    )
+                  );
+                }
+              );
 
             }
           ),
@@ -172,56 +185,4 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             
   }
 
-  Future _login( UsuarioProvider usuario ) async {
-    return await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-          contentPadding: EdgeInsets.all(0),
-          content: FutureBuilder(
-            future: usuario.login(_emailController.text, _passwordController.text),
-            builder: ( BuildContext context, AsyncSnapshot<User> snapshot) {
-              if ( snapshot.hasData ) {
-                User user = snapshot.data;
-
-                if ( user.name != null ) {
-                  return CustomAlertDialog(
-                    title: 'GENIAL!',
-                    text: 'Todo está correcto, puedes continuar.',
-                    image: Image.asset('assets/success.png'),
-                    primaryColor: Color(0xff399F7F),
-                    secondaryColor: Color(0xffB1E6D5),
-                    buttonText: 'CONTINUAR',
-                    press: () => Navigator.pushNamedAndRemoveUntil(context, 'home', (Route<dynamic> route) => false)
-                  );
-                } else {
-                  return CustomAlertDialog(
-                    title: 'OH NO!',
-                    text: 'Revisa tu correo o contraseña.',
-                    image: Image.asset('assets/ohno.png'),
-                    primaryColor: Color(0xffE05A61),
-                    secondaryColor: Color(0xffF3BCBE),
-                    buttonText: 'OK',
-                  );
-                }
-              } else {
-                return CustomAlertDialog(
-                  title: 'CARGANDO!',
-                  text: 'Estamos revisando que todo esté bien.',
-                  image: Image.asset('assets/loading.png'),
-                  primaryColor: Color(0xff70AAFB),
-                  secondaryColor: Color(0xffCAE2FF),
-                  buttonText: 'CANCELAR',
-                );
-              }
-            },
-          ),
-        );
-      }
-    );
-  }
-
 }
-

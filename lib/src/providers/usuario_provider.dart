@@ -17,19 +17,28 @@ class UsuarioProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<User> login( String email, String password) async {
-
-    User user = new User();
+  Future<Map<String, dynamic>> login( String email, String password) async {
 
     final authData = {
       'email'             : email,
       'password'          : password
     };
 
-    final resp = await http.post(
-      '$_url/login',
-      body: authData
-    );
+    final resp = await http.post( '$_url/login', body: authData );
+
+    return transformUser(resp);
+  }  
+
+  Future<Map<String, dynamic>> singup( User user ) async {
+
+    final resp = await http.post('$_url/usuario', body: user.toJson());
+
+    return transformUser(resp);
+    
+  }
+
+  Map<String, dynamic> transformUser( http.Response resp ) {
+    User user = new User();
 
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
 
@@ -38,7 +47,7 @@ class UsuarioProvider with ChangeNotifier{
       this.user = user;
     }
 
-    return user;
-  }  
+    return decodedResp;
+  }
 
 }
