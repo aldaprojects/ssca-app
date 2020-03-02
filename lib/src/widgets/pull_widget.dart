@@ -6,8 +6,9 @@ class Pull extends StatelessWidget {
 
 
   final Future<Map<String, dynamic>> future;
+  final Function navigator;
 
-  Pull({@required this.future});
+  Pull({@required this.future, @required this.navigator});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class Pull extends StatelessWidget {
               primaryColor: Color(0xff399F7F),
               secondaryColor: Color(0xffB1E6D5),
               buttonText: 'CONTINUAR',
-              press: () => Navigator.pushNamedAndRemoveUntil(context, 'home', (Route<dynamic> route) => false)
+              press: navigator
             );
           } else {
             dynamic message = data['err']['errors'];

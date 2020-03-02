@@ -194,6 +194,7 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                     )
                     :
                     Pull(
+                      navigator: () => Navigator.pushReplacementNamed(context, 'login'),
                       future: userProvider.singup(user)
                     )
                   );

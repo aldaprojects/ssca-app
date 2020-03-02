@@ -10,7 +10,7 @@ String validateEmail( String email ) {
 
 String validatePassword( String password ) {
 
-  return password.length > 0 && password.length < 4 ? 'Mínimo 6 caracteres' : null;
+  return password.length > 0 && password.length < 6 ? 'Mínimo 6 caracteres' : null;
 }
 
 String validateName( String name ) {

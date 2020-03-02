@@ -1,17 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+import 'package:sockets2/src/models/user_model.dart';
 import 'package:sockets2/src/providers/usuario_provider.dart';
+import 'package:sockets2/src/share_prefs/preferences.dart';
 import 'package:sockets2/src/widgets/customAppBar.dart';
 import 'package:sockets2/src/widgets/sin_grupo.dart';
+
+import 'package:jaguar_jwt/jaguar_jwt.dart';
+
+import 'dart:convert';
 
 class HomePage extends StatelessWidget {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final prefs = SharedPrefs();
 
   @override
   Widget build(BuildContext context) {
 
     final userProvider = Provider.of<UsuarioProvider>(context);
+    User user = User.fromJson(json.decode(prefs.user));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+      // add your code here.
+      userProvider.user = user;
+
+      final JwtClaim decClaimSet = verifyJwtHS256Signature(prefs.token, 'seed');
+    
+      if ( decClaimSet.expiry.compareTo(DateTime.now()) < 0 ) {
+
+        print('YA EXPIRO');
+        prefs.endToken = true;
+        prefs.startRoute = 'login';
+
+        Navigator.pushReplacementNamed(context, 'login');
+
+      }
+    });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -32,7 +59,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  userProvider.user.name, 
+                  user.name,
                   style: TextStyle( 
                     fontSize: 25.0,
                   ),

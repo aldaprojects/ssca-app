@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sockets2/src/models/user_model.dart';
 import 'package:sockets2/src/providers/usuario_provider.dart';
+import 'package:sockets2/src/share_prefs/preferences.dart';
 import 'package:sockets2/src/validators/validators.dart' as loginValidator;
 import 'package:sockets2/src/widgets/dialog_widget.dart';
 import 'package:sockets2/src/widgets/pull_widget.dart';
@@ -27,6 +28,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   final formKey = GlobalKey<FormState>();
 
+  final prefs = SharedPrefs();
+
   initState() {
     super.initState();
     controller = AnimationController(
@@ -40,8 +43,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     );
     controller.forward();
 
-    _emailController.text = 'admin@admin.com';
-    _passwordController.text = 'admin';
+    _emailController.text = prefs.email;
+
+    if ( prefs.endToken ) {
+      print('SESION CADUCADA');
+      prefs.startRoute = '/';
+      prefs.endToken = false;
+    } else {
+      print('NORMAL');
+    }
   }
 
   @override
@@ -132,7 +142,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             margin: EdgeInsets.only(left: 17.0, right: 30.0),
             child: Row(
               children: <Widget>[
-                Checkbox(value: false, onChanged: null),
+                Checkbox(
+                  value: prefs.remember, 
+                  onChanged: (value) {
+                    setState(() {
+                      prefs.remember = value;
+                    });
+                  }
+                ),
                 Text('Recuerdame'),
                 Spacer(),
                 Text('¿Olvidaste la contraseña?'),
@@ -153,6 +170,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ),
             onPressed: () async {
 
+              if ( prefs.remember ) {
+                prefs.email = _emailController.text;
+              } else {
+                prefs.email = '';
+              }
+
+              bool isValid = false;
+            
+              if ( formKey.currentState.validate() ) {
+                isValid = true;
+                prefs.startRoute = 'home';
+              }
+
               await showDialog(
                 barrierDismissible: false,
                 context: context,
@@ -160,7 +190,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   return AlertDialog(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                     contentPadding: EdgeInsets.all(0),
-                    content: Pull(
+                    content: !isValid
+                    ? 
+                    CustomAlertDialog(
+                      title: 'OH NO!',
+                      text: 'Hubo un error, revisa bien los campos.',
+                      image: Image.asset('assets/ohno.png'),
+                      primaryColor: Color(0xffE05A61),
+                      secondaryColor: Color(0xffF3BCBE),
+                      buttonText: 'OK',
+                    )
+                    :
+                    Pull(
+                      navigator: () => Navigator.pushNamedAndRemoveUntil(context, 'home', (Route<dynamic> route) => false),
                       future: userProvider.login(_emailController.text, _passwordController.text)
                     )
                   );

@@ -47,12 +47,12 @@ class User {
         fechaRegistro : DateTime.parse(json["fecha_registro"]),
     );
 
-    Map<String, String> toJson() => {
-        // "llave"           : llave.toString(),
-        // "role"            : role,
-        // "grupo"           : grupo == null ? null : grupo.toJson(),
-        // "google"          : google,
-        // "_id"             : id,
+    Map<String, dynamic> toJson() => {
+        "llave"           : llave,
+        "role"            : role,
+        "grupo"           : grupo == null ? null : grupo.toJson(),
+        "google"          : google,
+        "_id"             : id,
         "name"            : name,
         "email"           : email,
         "username"        : username,

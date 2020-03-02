@@ -4,9 +4,24 @@ import 'package:sockets2/src/routes/routes.dart';
 
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+import 'src/share_prefs/preferences.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = SharedPrefs();
+  await prefs.initPrefs();
+
+  print(prefs.user);
+  print(prefs.token);
+  print(prefs.startRoute);
+  print(prefs.endToken);
+
+  runApp(MyApp());
+}
  
 class MyApp extends StatelessWidget {
+
+  final prefs = SharedPrefs();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +32,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'SSPA',
         debugShowCheckedModeBanner: false,
-        initialRoute: '/',
+        initialRoute: prefs.startRoute,
         routes: getApplicationRoutes()
       ),
     );
