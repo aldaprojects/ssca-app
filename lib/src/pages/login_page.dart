@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sockets2/src/models/user_model.dart';
 import 'package:sockets2/src/providers/usuario_provider.dart';
 import 'package:sockets2/src/share_prefs/preferences.dart';
 import 'package:sockets2/src/validators/validators.dart' as loginValidator;
@@ -139,7 +138,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(left: 17.0, right: 30.0),
             child: Row(
               children: <Widget>[
                 Checkbox(
@@ -152,8 +150,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 ),
                 Text('Recuerdame'),
                 Spacer(),
-                Text('¿Olvidaste la contraseña?'),
-
+                FlatButton(
+                  child: Text('¿Olvidaste la contraseña?', style: TextStyle(color: Colors.blue)),
+                  onPressed: () => Navigator.pushNamed(context, 'pwd'),
+                ),
               ],
             ),
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:sockets2/src/models/user_model.dart';
 import 'package:sockets2/src/providers/usuario_provider.dart';
@@ -28,6 +27,9 @@ class HomePage extends StatelessWidget {
       userProvider.user = user;
 
       final JwtClaim decClaimSet = verifyJwtHS256Signature(prefs.token, 'seed');
+
+      print(decClaimSet.expiry);
+      print(DateTime.now());
     
       if ( decClaimSet.expiry.compareTo(DateTime.now()) < 0 ) {
 
