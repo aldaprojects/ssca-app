@@ -16,7 +16,12 @@ void main() async {
   print(prefs.startRoute);
   print(prefs.endToken);
 
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider( create: ( context ) => UsuarioProvider() )
+    ],
+    child: MyApp(),
+  ));
 }
  
 class MyApp extends StatelessWidget {
@@ -25,16 +30,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider( create: ( context ) => UsuarioProvider() )
-      ],
-      child: MaterialApp(
-        title: 'SSPA',
-        debugShowCheckedModeBanner: false,
-        initialRoute: prefs.startRoute,
-        routes: getApplicationRoutes()
-      ),
+    return MaterialApp(
+      title: 'SSPA',
+      debugShowCheckedModeBanner: false,
+      initialRoute: prefs.startRoute,
+      routes: getApplicationRoutes()
     );
   }
 }

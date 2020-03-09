@@ -1,26 +1,25 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
-import 'package:flutter/services.dart';
-
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sockets2/src/share_prefs/preferences.dart';
-import 'package:sockets2/src/validators/validators.dart' as loginValidator;
+
+import 'package:pinput/pin_put/pin_put.dart';
 
 
-class PasswordPage extends StatefulWidget {
-  _PasswordPageState createState() => _PasswordPageState();
+class PinPage extends StatefulWidget {
+  _PinPageState createState() => _PinPageState();
 }
 
-class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMixin {
+class _PinPageState extends State<PinPage> with TickerProviderStateMixin {
 
   AnimationController controller;
   Animation<double> animation;
 
-  final TextEditingController _emailController    = TextEditingController();
-
   final formKey = GlobalKey<FormState>();
-
   final prefs = SharedPrefs();
+
+  int seconds = 300;
+  String time = '5:00';
 
   initState() {
     super.initState();
@@ -35,10 +34,32 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
     );
     controller.forward();
 
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        int minutos = (seconds/60).floor();
+        int segundos = seconds%60;
+        time = '$minutos:';
+        if ( segundos < 10 ) {
+          time += '0$segundos';
+        } else {
+          time += '$segundos';
+        }
+
+        if ( seconds == 0 ) {
+          timer.cancel();
+        }
+        seconds = seconds - 1;
+
+
+      });
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
+    
+    
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -66,7 +87,7 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
             height: 250,
             child: FadeTransition(
               opacity: animation,
-              child: Image.asset('assets/forgpwd.png')
+              child: Image.asset('assets/pin.png')
             )
           ),
           Padding(
@@ -74,12 +95,12 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
             child: Column(
               children: <Widget>[
                 Text(
-                  '¿Olvidaste tu contraseña?',
+                  'Introduce el pin',
                   style: TextStyle(fontSize: 25.0),
                 ),
                 SizedBox(height: 20.0),
                 Text(
-                    'Introduce tu correo asociado con tu cuenta y te enviaremos un código de 5 dígitos que deberás introducir después.',
+                    'Tiempo restante para que el pin expire: $time',
                     style: TextStyle(fontSize: 15.0, color: Colors.black54),
                     textAlign: TextAlign.center,
                 ),
@@ -98,17 +119,14 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
         key: formKey,
         child: Column(
           children: <Widget>[
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: 'Correo',
-                suffixIcon: Icon(FontAwesomeIcons.at)
-              ),
-              validator: loginValidator.validateEmail,
-              autovalidate: true,
+            PinPut(
+              fieldsCount: 4,
+              onSubmit: (pin) {
+                print(pin);
+              },
+              actionButtonsEnabled: false
             ),
-            SizedBox(height: 25.0)
+            SizedBox(height: 25.0),
           ],
         ),
       ),
@@ -130,7 +148,8 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
                 textAlign: TextAlign.center,
               ),
             ),
-            onPressed: () => Navigator.pushNamed(context, 'pin')
+            onPressed: () {
+            }
           )
         ],
       ),

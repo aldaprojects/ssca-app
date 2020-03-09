@@ -7,7 +7,7 @@ import 'package:sockets2/src/share_prefs/preferences.dart';
 
 class UsuarioProvider with ChangeNotifier{
 
-  final String _url = 'https://api-puerta.herokuapp.com';
+  final String _url = 'http://192.168.0.110:3000';
   User _user;
 
   final prefs = SharedPrefs();
@@ -45,19 +45,19 @@ class UsuarioProvider with ChangeNotifier{
     final resp = await http.post('$_url/usuario', body: authData);
 
     return transformUser(resp);
-    
   }
 
   Map<String, dynamic> transformUser( http.Response resp ) {
     User user = new User();
+
+    print(resp.body);
 
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
 
     if ( decodedResp['ok'] ) {
       user = User.fromJson(decodedResp['usuario']);
       this.user = user;
-
-      prefs.token = decodedResp['token'];
+        prefs.token = decodedResp['token'];
       prefs.user = userToJson(user);
 
     }

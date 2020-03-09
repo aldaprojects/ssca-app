@@ -8,6 +8,10 @@ String validateEmail( String email ) {
   return regExp.hasMatch(email) || email.length == 0 ? null : 'Ingresa un correo válido';
 }
 
+String validateUserName( String username ) {
+  return username.length > 0 && username.length < 5 ? 'Mínimo 5 caracteres' : null;
+}
+
 String validatePassword( String password ) {
 
   return password.length > 0 && password.length < 6 ? 'Mínimo 6 caracteres' : null;

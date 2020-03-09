@@ -21,13 +21,13 @@ class HomePage extends StatelessWidget {
     final userProvider = Provider.of<UsuarioProvider>(context);
     User user = User.fromJson(json.decode(prefs.user));
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    final JwtClaim decClaimSet = verifyJwtHS256Signature(prefs.token, 'seed');
+    
+    userProvider.user = user;
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) async {  
 
       // add your code here.
-      userProvider.user = user;
-
-      final JwtClaim decClaimSet = verifyJwtHS256Signature(prefs.token, 'seed');
-
       print(decClaimSet.expiry);
       print(DateTime.now());
     

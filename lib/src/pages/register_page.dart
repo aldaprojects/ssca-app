@@ -109,7 +109,9 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
               labelText: 'Apodo',
               suffixIcon: Icon(FontAwesomeIcons.userAlt)
             ),
-            validator: registerValidator.validateName
+            validator: registerValidator.validateUserName,
+            autovalidate: true,
+            
           ),
           TextFormField(
             controller: _emailController,

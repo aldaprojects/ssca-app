@@ -17,6 +17,7 @@ dependencies:
   provider: ^4.0.4
   shared_preferences: ^0.5.2
   jaguar_jwt: ^2.1.6
+  pinput: ^0.1.10
 
 
 dev_dependencies:
