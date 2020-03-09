@@ -79,7 +79,7 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
                 ),
                 SizedBox(height: 20.0),
                 Text(
-                    'Introduce tu correo asociado con tu cuenta y te enviaremos un código de 5 dígitos que deberás introducir después.',
+                    'Introduce tu correo asociado con tu cuenta y te enviaremos un código de 4 dígitos que deberás introducir después.',
                     style: TextStyle(fontSize: 15.0, color: Colors.black54),
                     textAlign: TextAlign.center,
                 ),
