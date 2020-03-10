@@ -44,17 +44,39 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
     _emailController.text = prefs.email;
 
-    if ( prefs.endToken ) {
-      print('SESION CADUCADA');
-      prefs.startRoute = '/';
-      prefs.endToken = false;
-    } else {
-      print('NORMAL');
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+      if ( prefs.endToken ) {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+              contentPadding: EdgeInsets.all(0),
+              content: CustomAlertDialog(
+                title: 'SESIÓN CADUCADA!',
+                text: 'Vuelve a iniciar sesión para continuar.',
+                image: Image.asset('assets/ohno.png'),
+                primaryColor: Color(0xffE05A61),
+                secondaryColor: Color(0xffF3BCBE),
+                buttonText: 'OK',
+              )
+            );
+          }
+        );
+        prefs.startRoute = '/';
+        prefs.endToken = false;
+      } else {
+        print('NORMAL');
+      }
+      
+    });
 
     final userProvider = Provider.of<UsuarioProvider>(context);
 
