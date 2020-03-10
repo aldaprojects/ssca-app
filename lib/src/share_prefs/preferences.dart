@@ -46,6 +46,14 @@ class SharedPrefs {
     _prefs.setString('email', email);
   }
 
+  get emailPin {
+    return _prefs.getString('emailPin');
+  }
+
+  set emailPin(String email) {
+    _prefs.setString('emailPin', email);
+  }
+
   get endToken{
     return _prefs.getBool('endtoken') ?? false;
   }
@@ -60,6 +68,22 @@ class SharedPrefs {
 
   set startRoute(String route){
     _prefs.setString('startroute', route);
+  }
+
+  get date{
+    return _prefs.getString('date') ?? null;
+  }
+
+  set date(String date){
+    _prefs.setString('date', date);
+  }
+
+  get pin{
+    return _prefs.getInt('pin') ?? -1;
+  }
+
+  set pin(int pin){
+    _prefs.setInt('pin', pin);
   }
 
 }

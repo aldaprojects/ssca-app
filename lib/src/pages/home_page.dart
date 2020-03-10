@@ -33,7 +33,6 @@ class HomePage extends StatelessWidget {
     
       if ( decClaimSet.expiry.compareTo(DateTime.now()) < 0 ) {
 
-        print('YA EXPIRO');
         prefs.endToken = true;
         prefs.startRoute = 'login';
 

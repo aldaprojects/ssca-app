@@ -29,8 +29,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   final prefs = SharedPrefs();
 
+
   initState() {
     super.initState();
+    
     controller = AnimationController(
         duration: Duration(
           milliseconds: 500),
@@ -72,8 +74,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         );
         prefs.startRoute = '/';
         prefs.endToken = false;
-      } else {
-        print('NORMAL');
       }
       
     });

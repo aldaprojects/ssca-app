@@ -7,7 +7,7 @@ import 'package:sockets2/src/share_prefs/preferences.dart';
 
 class UsuarioProvider with ChangeNotifier{
 
-  final String _url = 'http://192.168.0.110:3000';
+  final String _url = 'http://192.168.1.72:3000';
   User _user;
 
   final prefs = SharedPrefs();
@@ -61,6 +61,20 @@ class UsuarioProvider with ChangeNotifier{
       prefs.user = userToJson(user);
 
     }
+
+    return decodedResp;
+  }
+
+  Future<Map<String, dynamic>> reqPin( String email ) async {
+    final resp = await http.post('$_url/usuario/password', body: {'email': email});
+
+    final Map<String, dynamic> decodedResp = json.decode(resp.body);
+
+    if ( decodedResp['ok'] ) {
+      prefs.pin = decodedResp['pin'];
+    }
+
+    print('Future ${prefs.pin}');
 
     return decodedResp;
   }

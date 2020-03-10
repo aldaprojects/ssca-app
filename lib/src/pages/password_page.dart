@@ -3,8 +3,13 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/services.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:sockets2/src/share_prefs/preferences.dart';
 import 'package:sockets2/src/validators/validators.dart' as loginValidator;
+
+import '../providers/usuario_provider.dart';
+import '../widgets/dialog_widget.dart';
+import '../widgets/pull_widget.dart';
 
 
 class PasswordPage extends StatefulWidget {
@@ -40,6 +45,8 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
 
+    final userProvider = Provider.of<UsuarioProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: FadeTransition(
@@ -49,7 +56,7 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
             children: <Widget>[
               _loginHeader(),
               _loginBody(),
-              _loginFooter()
+              _loginFooter(userProvider)
             ],
           ),
         ),
@@ -115,7 +122,7 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
     );
   }
 
-  Widget _loginFooter() {
+  Widget _loginFooter( UsuarioProvider userProvider ) {
     return  Container(
       child: Column(
         children: <Widget>[
@@ -130,7 +137,40 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
                 textAlign: TextAlign.center,
               ),
             ),
-            onPressed: () => Navigator.pushNamed(context, 'pin')
+            onPressed: () async {
+
+              bool isValid = false;
+            
+              if ( formKey.currentState.validate() && _emailController.text != '' ) isValid = true;
+
+              prefs.emailPin = _emailController.text;
+
+              await showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                    contentPadding: EdgeInsets.all(0),
+                    content: !isValid
+                    ? 
+                    CustomAlertDialog(
+                      title: 'OH NO!',
+                      text: 'Debe introducir un correo válido.',
+                      image: Image.asset('assets/ohno.png'),
+                      primaryColor: Color(0xffE05A61),
+                      secondaryColor: Color(0xffF3BCBE),
+                      buttonText: 'OK',
+                    )
+                    :
+                    Pull(
+                      navigator: () => Navigator.pushNamed(context, 'pin'),
+                      future: userProvider.reqPin(_emailController.text)
+                    )
+                  );
+                }
+            );
+            }
           )
         ],
       ),
