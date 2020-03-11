@@ -7,7 +7,7 @@ import 'package:sockets2/src/share_prefs/preferences.dart';
 
 class UsuarioProvider with ChangeNotifier{
 
-  final String _url = 'http://192.168.1.72:3000';
+  final String _url = 'https://api-puerta.herokuapp.com';
   User _user;
 
   final prefs = SharedPrefs();

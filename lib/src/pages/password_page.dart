@@ -169,7 +169,7 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
                     )
                   );
                 }
-            );
+              );
             }
           )
         ],

@@ -8,8 +8,12 @@ import 'package:pinput/pin_put/pin_put.dart';
 
 import '../providers/usuario_provider.dart';
 
-
 class PinPage extends StatefulWidget {
+
+  final String texto;
+  final Future navigator;
+
+  PinPage({this.texto, this.navigator});
   _PinPageState createState() => _PinPageState();
 }
 
