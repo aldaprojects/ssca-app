@@ -4,11 +4,17 @@ import 'package:sockets2/src/widgets/dialog_widget.dart';
 
 class Pull extends StatelessWidget {
 
-
   final Future<Map<String, dynamic>> future;
   final Function navigator;
+  final String okText;
+  final String email;
 
-  Pull({@required this.future, @required this.navigator});
+  Pull({
+    @required this.future, 
+    @required this.navigator, 
+    this.okText = 'Todo está correcto, puedes continuar.',
+    this.email
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +28,7 @@ class Pull extends StatelessWidget {
           if ( data['ok'] ) {
             return CustomAlertDialog(
               title: 'GENIAL!',
-              text: 'Todo está correcto, puedes continuar.',
+              text: okText,
               image: Image.asset('assets/success.png'),
               primaryColor: Color(0xff399F7F),
               secondaryColor: Color(0xffB1E6D5),
@@ -31,11 +37,13 @@ class Pull extends StatelessWidget {
             );
           } else {
             dynamic message = data['err']['errors'];
+
             if ( !message.containsKey('message') ) {
               message = 'Hubo un error, revisa bien los campos.';
             } else {
               message = data['err']['errors']['message'];
             }
+
             return CustomAlertDialog(
               title: 'OH NO!',
               text: message,
@@ -43,6 +51,8 @@ class Pull extends StatelessWidget {
               primaryColor: Color(0xffE05A61),
               secondaryColor: Color(0xffF3BCBE),
               buttonText: 'OK',
+              anotherButton: data['err']['errors'].containsKey('noVerificada') ? true : false,
+              email: email,
             );
           }
         } else {

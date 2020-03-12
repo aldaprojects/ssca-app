@@ -101,7 +101,8 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
               labelText: 'Nombre completo',
               suffixIcon: Icon(FontAwesomeIcons.user)
             ),
-            validator: registerValidator.validateName
+            validator: registerValidator.validateName,
+             autovalidate: true,
           ),
           TextFormField(
             controller: _nickController,
@@ -111,7 +112,6 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
             ),
             validator: registerValidator.validateUserName,
             autovalidate: true,
-            
           ),
           TextFormField(
             controller: _emailController,
@@ -197,7 +197,8 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                     :
                     Pull(
                       navigator: () => Navigator.pushReplacementNamed(context, 'login'),
-                      future: userProvider.singup(user)
+                      future: userProvider.singup(user),
+                      okText: 'Revisa tu correo para que puedas verificar tu cuenta.',
                     )
                   );
                 }

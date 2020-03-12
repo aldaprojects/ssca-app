@@ -7,7 +7,8 @@ import 'package:sockets2/src/share_prefs/preferences.dart';
 
 class UsuarioProvider with ChangeNotifier{
 
-  final String _url = 'https://api-puerta.herokuapp.com';
+  // final String _url = 'https://api-puerta.herokuapp.com';
+  final String _url = 'http://192.168.1.72:3000';
   User _user;
 
   final prefs = SharedPrefs();
@@ -75,6 +76,14 @@ class UsuarioProvider with ChangeNotifier{
     }
 
     print('Future ${prefs.pin}');
+
+    return decodedResp;
+  }
+
+  Future<Map<String, dynamic>> resendEmail( String email ) async {
+    final resp = await http.get('$_url/usuario/u/resend', headers: {'email': email});
+
+    final Map<String, dynamic> decodedResp = json.decode(resp.body);
 
     return decodedResp;
   }

@@ -225,7 +225,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     :
                     Pull(
                       navigator: () => Navigator.pushNamedAndRemoveUntil(context, 'home', (Route<dynamic> route) => false),
-                      future: userProvider.login(_emailController.text, _passwordController.text)
+                      future: userProvider.login(_emailController.text, _passwordController.text),
+                      email: _emailController.text,
                     )
                   );
                 }
