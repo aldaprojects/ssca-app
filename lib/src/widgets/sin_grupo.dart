@@ -5,11 +5,11 @@ class SinGrupo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Image.asset('assets/turist.jpg'),
+        Image.asset('assets/nogroup.png'),
         Center(
           child: Text(
-            '¿Recién llegaste y no sabes a dónde ir?',
-            style: TextStyle( fontSize: 17.0 ),
+            'No estás en un grupo aún, no estés solo...',
+            style: TextStyle( fontSize: 15.0 ),
           )
         ),
         Row(

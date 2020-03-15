@@ -49,6 +49,14 @@ class _ResetPwdPageState extends State<ResetPwdPage> with TickerProviderStateMix
     final userProvider = Provider.of<UsuarioProvider>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.blue),
+          onPressed: () => Navigator.pop(context)
+        ),
+      ),
       backgroundColor: Colors.white,
       body: FadeTransition(
         opacity: animation,
@@ -66,36 +74,33 @@ class _ResetPwdPageState extends State<ResetPwdPage> with TickerProviderStateMix
   }
 
   Widget _loginHeader() {
-    return Container(
-      padding: EdgeInsets.only(top: 70.0),
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 250,
-            child: FadeTransition(
-              opacity: animation,
-              child: Image.asset('assets/resetpwd.png')
-            )
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'Ingresa tu contraseña nueva',
-                  style: TextStyle(fontSize: 25.0),
-                ),
-                SizedBox(height: 10.0),
-                Text(
-                    'Esta vez no la olvides.',
-                    style: TextStyle(fontSize: 15.0, color: Colors.black54),
-                    textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+    return Column(
+      children: <Widget>[
+        Container(
+          height: 250,
+          child: FadeTransition(
+            opacity: animation,
+            child: Image.asset('assets/resetpwd.png')
           )
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: <Widget>[
+              Text(
+                'Ingresa tu contraseña nueva',
+                style: TextStyle(fontSize: 25.0),
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                  'Esta vez no la olvides.',
+                  style: TextStyle(fontSize: 15.0, color: Colors.black54),
+                  textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
@@ -170,7 +175,6 @@ class _ResetPwdPageState extends State<ResetPwdPage> with TickerProviderStateMix
                       text: 'Revisa bien los campos.',
                       image: Image.asset('assets/ohno.png'),
                       primaryColor: Color(0xffE05A61),
-                      secondaryColor: Color(0xffF3BCBE),
                       buttonText: 'OK',
                     )
                     :

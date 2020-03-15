@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SSPA',
       debugShowCheckedModeBanner: false,
-      initialRoute: 'home',
+      initialRoute: '/',
       routes: getApplicationRoutes()
     );
   }

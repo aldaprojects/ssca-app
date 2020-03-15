@@ -1,6 +1,4 @@
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,9 +15,6 @@ class SingUpPage extends StatefulWidget {
 
 class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
 
-  AnimationController controller;
-  Animation<double> animation;
-
   final formKey = GlobalKey<FormState>();
 
   TextEditingController _nameController      = TextEditingController();
@@ -30,16 +25,6 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
 
   initState() {
     super.initState();
-    controller = AnimationController(
-        duration: Duration(
-          milliseconds: 500),
-        vsync: this
-    );
-    animation = CurvedAnimation(
-      parent: controller, 
-      curve: Curves.easeIn
-    );
-    controller.forward();
   }
 
   Widget build(BuildContext context) {
@@ -47,22 +32,20 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
     final userProvider = Provider.of<UsuarioProvider>(context);
 
     return Scaffold(
-      body: FadeTransition(
-        opacity: animation,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                _image(),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 30.0),
-                  child: _formBody()
-                ),
-                SizedBox(height: 25.0),
-                _footerRegister(userProvider)
-              ],
-            ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _image(),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 30.0),
+                child: _formBody()
+              ),
+              SizedBox(height: 25.0),
+              _footerRegister(userProvider)
+            ],
           ),
         ),
       ),
@@ -73,18 +56,12 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
     return Column(
       children: <Widget>[
         Container(
-          height: 300,
-          child: FadeTransition(
-            opacity: animation,
-            child: FlareActor(
-              'assets/SignUp.flr',
-              animation: 'relax'
-            )
-          )
+          height: 200,
+          child: Image.asset('assets/relax.png'),
         ),
         Text(
           'No hay prisa',
-          style: TextStyle(color: Colors.grey, fontSize: 17.0))
+          style: TextStyle(color: Colors.grey, fontSize: 15.0))
       ],
     );
   }
@@ -191,7 +168,6 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                       text: 'Hubo un error, revisa bien los campos.',
                       image: Image.asset('assets/ohno.png'),
                       primaryColor: Color(0xffE05A61),
-                      secondaryColor: Color(0xffF3BCBE),
                       buttonText: 'OK',
                     )
                     :

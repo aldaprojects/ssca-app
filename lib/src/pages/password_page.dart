@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/services.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,28 +17,13 @@ class PasswordPage extends StatefulWidget {
 
 class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMixin {
 
-  AnimationController controller;
-  Animation<double> animation;
-
   final TextEditingController _emailController    = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
-
   final prefs = SharedPrefs();
 
   initState() {
     super.initState();
-    controller = AnimationController(
-        duration: Duration(
-          milliseconds: 500),
-        vsync: this
-    );
-    animation = CurvedAnimation(
-      parent: controller, 
-      curve: Curves.easeIn
-    );
-    controller.forward();
-
   }
 
   @override
@@ -48,53 +32,52 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
     final userProvider = Provider.of<UsuarioProvider>(context);
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.blue),
+          onPressed: () => Navigator.pop(context)
+        ),
+      ),
       backgroundColor: Colors.white,
-      body: FadeTransition(
-        opacity: animation,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              _loginHeader(),
-              _loginBody(),
-              _loginFooter(userProvider)
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            _loginHeader(),
+            _loginBody(),
+            _loginFooter(userProvider)
+          ],
         ),
       ),
     );
   }
 
   Widget _loginHeader() {
-    return Container(
-      padding: EdgeInsets.only(top: 70.0),
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 250,
-            child: FadeTransition(
-              opacity: animation,
-              child: Image.asset('assets/forgpwd.png')
-            )
+    return Column(
+      children: <Widget>[
+        Container(
+          height: 250,
+          child: Image.asset('assets/forgpwd.png')
+        ),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: <Widget>[
+              Text(
+                '¿Olvidaste tu contraseña?',
+                style: TextStyle(fontSize: 25.0),
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                  'Introduce el correo asociado con tu cuenta y te enviaremos un código de 4 dígitos que deberás introducir después.',
+                  style: TextStyle(fontSize: 15.0, color: Colors.black54),
+                  textAlign: TextAlign.center,
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  '¿Olvidaste tu contraseña?',
-                  style: TextStyle(fontSize: 25.0),
-                ),
-                SizedBox(height: 20.0),
-                Text(
-                    'Introduce el correo asociado con tu cuenta y te enviaremos un código de 4 dígitos que deberás introducir después.',
-                    style: TextStyle(fontSize: 15.0, color: Colors.black54),
-                    textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 
@@ -159,7 +142,6 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
                       text: 'Debe introducir un correo válido.',
                       image: Image.asset('assets/ohno.png'),
                       primaryColor: Color(0xffE05A61),
-                      secondaryColor: Color(0xffF3BCBE),
                       buttonText: 'OK',
                     )
                     :

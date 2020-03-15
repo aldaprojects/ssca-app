@@ -10,6 +10,13 @@ PreferredSizeWidget appBar( _scaffoldKey ){
     elevation: 0.0,
     backgroundColor: Colors.transparent,
     actions: <Widget>[
+      // Container(
+      //   margin: EdgeInsets.only(right: 30),
+      //   child: Icon(
+      //     FontAwesomeIcons.doorOpen,
+      //     color: Colors.green
+      //   )
+      // ),
       Container(
         margin: EdgeInsets.only(top: 10.0),
         child: Stack(
@@ -30,7 +37,6 @@ PreferredSizeWidget appBar( _scaffoldKey ){
           ],
         ),
       )
-      
     ],
   );
 }

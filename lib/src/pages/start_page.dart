@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
+import 'package:sockets2/src/share_prefs/preferences.dart';
 
 
 class StartPage extends StatefulWidget {
@@ -13,6 +14,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
   Animation<double> animation;
   AnimationController controller2;
   Animation<double> animation2;
+  final SharedPrefs prefs = SharedPrefs();
 
   initState() {
     super.initState();
@@ -36,6 +38,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
       curve: Curves.easeIn
     );
     controller2.forward();
+    prefs.startRoute = '/';
   }
 
   Widget build(BuildContext context) {

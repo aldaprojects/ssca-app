@@ -9,7 +9,6 @@ class CustomAlertDialog extends StatelessWidget {
   final String text;
   final Image image;
   final Color primaryColor;
-  final Color secondaryColor;
   final String buttonText;
   final Function press;
   final bool anotherButton;
@@ -20,7 +19,6 @@ class CustomAlertDialog extends StatelessWidget {
     @required this.text,
     @required this.image,
     @required this.primaryColor,
-    @required this.secondaryColor,
     @required this.buttonText,
     this.press,
     this.anotherButton = false,
@@ -40,7 +38,7 @@ class CustomAlertDialog extends StatelessWidget {
           height: 150,
           child: image,
           decoration: BoxDecoration(
-            color: secondaryColor,
+            color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.0),
               topRight: Radius.circular(15.0)
@@ -62,7 +60,7 @@ class CustomAlertDialog extends StatelessWidget {
                   color: primaryColor
                 ),
               ),
-              Text(text, style: TextStyle(color: Colors.black87))
+              Text(text, style: TextStyle(color: Colors.black87), textAlign: TextAlign.center,)
             ],
           ),
         ),

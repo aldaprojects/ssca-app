@@ -31,7 +31,6 @@ class Pull extends StatelessWidget {
               text: okText,
               image: Image.asset('assets/success.png'),
               primaryColor: Color(0xff399F7F),
-              secondaryColor: Color(0xffB1E6D5),
               buttonText: 'CONTINUAR',
               press: navigator
             );
@@ -49,7 +48,6 @@ class Pull extends StatelessWidget {
               text: message,
               image: Image.asset('assets/ohno.png'),
               primaryColor: Color(0xffE05A61),
-              secondaryColor: Color(0xffF3BCBE),
               buttonText: 'OK',
               anotherButton: data['err']['errors'].containsKey('noVerificada') ? true : false,
               email: email,
@@ -61,7 +59,6 @@ class Pull extends StatelessWidget {
             text: 'Estamos revisando que todo esté bien.',
             image: Image.asset('assets/loading.png'),
             primaryColor: Color(0xff70AAFB),
-            secondaryColor: Color(0xffCAE2FF),
             buttonText: 'CANCELAR',
           );
         }

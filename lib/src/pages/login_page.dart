@@ -1,6 +1,4 @@
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/services.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,33 +17,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
-  AnimationController controller;
-  Animation<double> animation;
-
   final TextEditingController _emailController    = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
-
   final prefs = SharedPrefs();
-
 
   initState() {
     super.initState();
-    
-    controller = AnimationController(
-        duration: Duration(
-          milliseconds: 500),
-        vsync: this
-    );
-    animation = CurvedAnimation(
-      parent: controller, 
-      curve: Curves.easeIn
-    );
-    controller.forward();
-
     _emailController.text = prefs.email;
-
   }
 
   @override
@@ -66,7 +46,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 text: 'Vuelve a iniciar sesión para continuar.',
                 image: Image.asset('assets/ohno.png'),
                 primaryColor: Color(0xffE05A61),
-                secondaryColor: Color(0xffF3BCBE),
                 buttonText: 'OK',
               )
             );
@@ -81,18 +60,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final userProvider = Provider.of<UsuarioProvider>(context);
 
     return Scaffold(
-
-      body: FadeTransition(
-        opacity: animation,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                _loginHeader(),
-                _loginBody(),
-                _loginFooter(userProvider)
-              ],
-            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              _loginHeader(),
+              _loginBody(),
+              _loginFooter(userProvider)
+            ],
           ),
         ),
       ),
@@ -100,30 +76,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   Widget _loginHeader() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 300,
-            child: FadeTransition(
-              opacity: animation,
-              child: FlareActor(
-                'assets/SignIn.flr',
-                animation: 'login'
-              )
-            )
-          ),
-          Text(
-            'Nos alegra que estés de vuelta',
-            style: TextStyle(color: Colors.grey, fontSize: 14.0))
-        ],
-      ),
+    return Column(
+      children: <Widget>[
+        Image.asset('assets/signin.png'),
+        Text(
+          'Nos alegra que estés de vuelta',
+          style: TextStyle(color: Colors.grey, fontSize: 14.0))
+      ],
     );
   }
 
   Widget _loginBody() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30.0),
+      margin: EdgeInsets.only(left: 30.0, right: 30.0),
       child: Form(
         key: formKey,
         child: Column(
@@ -219,12 +184,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       text: 'Hubo un error, revisa bien los campos.',
                       image: Image.asset('assets/ohno.png'),
                       primaryColor: Color(0xffE05A61),
-                      secondaryColor: Color(0xffF3BCBE),
                       buttonText: 'OK',
                     )
                     :
                     Pull(
-                      navigator: () => Navigator.pushNamedAndRemoveUntil(context, 'home', (Route<dynamic> route) => false),
+                      navigator: () => Navigator.pushNamedAndRemoveUntil(context, 'controller', (Route<dynamic> route) => false),
                       future: userProvider.login(_emailController.text, _passwordController.text),
                       email: _emailController.text,
                     )
