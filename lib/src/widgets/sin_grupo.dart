@@ -5,7 +5,7 @@ class SinGrupo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Image.asset('assets/turist.png'),
+        Image.asset('assets/turist.jpg'),
         Center(
           child: Text(
             '¿Recién llegaste y no sabes a dónde ir?',

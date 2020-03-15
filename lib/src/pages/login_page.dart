@@ -240,7 +240,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               Text('¿No tienes cuenta?'),
               FlatButton(
                 child: Text('Crear una', style: TextStyle(color: Colors.blue),),
-                onPressed: () => Navigator.pushNamed(context, 'register'),
+                onPressed: () => Navigator.popAndPushNamed(context, 'register'),
               )
             ],
           ),

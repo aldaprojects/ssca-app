@@ -21,6 +21,7 @@ class _PinPageState extends State<PinPage> with TickerProviderStateMixin {
 
   AnimationController controller;
   Animation<double> animation;
+  Timer _timer;
 
   final formKey = GlobalKey<FormState>();
   final prefs = SharedPrefs();
@@ -31,6 +32,8 @@ class _PinPageState extends State<PinPage> with TickerProviderStateMixin {
 
   void countdown(){
     Timer.periodic(Duration(seconds: 1), (timer) {
+      print(seconds);
+      _timer = timer;
       setState(() {
         int minutos = (seconds/60).floor();
         int segundos = seconds%60;
@@ -77,6 +80,13 @@ class _PinPageState extends State<PinPage> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose(){
+    super.dispose();
+    _timer.cancel();
+    prefs.startRoute = '/';
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final userProvider = Provider.of<UsuarioProvider>(context);
@@ -89,7 +99,7 @@ class _PinPageState extends State<PinPage> with TickerProviderStateMixin {
           icon: Icon(Icons.arrow_back, color: Colors.blue),
           onPressed: (){
             prefs.startRoute = '/';
-            Navigator.pushNamed(context, 'login');
+            Navigator.pushReplacementNamed(context, 'login');
           },
         ),
       ),
@@ -125,12 +135,12 @@ class _PinPageState extends State<PinPage> with TickerProviderStateMixin {
           child: Column(
             children: <Widget>[
               Text(
-                'Introduce el pin',
+                'Introduce el código',
                 style: TextStyle(fontSize: 25.0),
               ),
               SizedBox(height: 20.0),
               Text(
-                  'Si el correo está asociado, se enviará un pin que expira en: ',
+                  'Si el correo está asociado, se enviará un código que expira en: ',
                   style: TextStyle(fontSize: 15.0, color: Colors.black54),
                   textAlign: TextAlign.center,
               ),
@@ -184,7 +194,9 @@ class _PinPageState extends State<PinPage> with TickerProviderStateMixin {
               print('Boton ${prefs.pin}');
               if ( pin == prefs.pin ) {
                 prefs.startRoute = '/';
-                Navigator.pushReplacementNamed(context, 'reset');
+                _timer.cancel();
+                Navigator.pop(context);
+                Navigator.popAndPushNamed(context, 'reset');
               } else {
                 print('INCORRECTO');
               }

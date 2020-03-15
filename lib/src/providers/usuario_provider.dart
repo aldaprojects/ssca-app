@@ -67,7 +67,7 @@ class UsuarioProvider with ChangeNotifier{
   }
 
   Future<Map<String, dynamic>> reqPin( String email ) async {
-    final resp = await http.post('$_url/usuario/password', body: {'email': email});
+    final resp = await http.post('$_url/usuario/pin', body: {'email': email});
 
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
 
@@ -84,6 +84,16 @@ class UsuarioProvider with ChangeNotifier{
     final resp = await http.get('$_url/usuario/u/resend', headers: {'email': email});
 
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
+
+    return decodedResp;
+  }
+
+  Future<Map<String, dynamic>> updatePassword( String email, String password ) async {
+    final resp = await http.put('$_url/usuario/password?email=$email', body: {'password': password });
+
+    final Map<String, dynamic> decodedResp = json.decode(resp.body);
+
+    print(decodedResp);
 
     return decodedResp;
   }

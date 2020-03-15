@@ -196,7 +196,10 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
                     )
                     :
                     Pull(
-                      navigator: () => Navigator.pushReplacementNamed(context, 'login'),
+                      navigator: () {
+                        Navigator.pop(context);
+                        Navigator.popAndPushNamed(context, 'login');
+                      },
                       future: userProvider.singup(user),
                       okText: 'Revisa tu correo para que puedas verificar tu cuenta.',
                     )
@@ -211,7 +214,7 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
             Text('¿Ya tienes cuenta?'),
             FlatButton(
               child: Text('Iniciar Sesión', style: TextStyle(color: Colors.blue),),
-              onPressed: () => Navigator.pushNamed(context, 'login'),
+              onPressed: () => Navigator.popAndPushNamed(context, 'login'),
             )
           ],
         ),

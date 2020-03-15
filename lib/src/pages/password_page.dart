@@ -86,7 +86,7 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
                 ),
                 SizedBox(height: 20.0),
                 Text(
-                    'Introduce tu correo asociado con tu cuenta y te enviaremos un código de 4 dígitos que deberás introducir después.',
+                    'Introduce el correo asociado con tu cuenta y te enviaremos un código de 4 dígitos que deberás introducir después.',
                     style: TextStyle(fontSize: 15.0, color: Colors.black54),
                     textAlign: TextAlign.center,
                 ),
@@ -141,7 +141,7 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
 
               bool isValid = false;
             
-              if ( formKey.currentState.validate() && _emailController.text != '' ) isValid = true;
+              if ( formKey.currentState.validate() ) isValid = true;
 
               prefs.emailPin = _emailController.text;
 
@@ -164,7 +164,7 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
                     )
                     :
                     Pull(
-                      navigator: () => Navigator.pushNamed(context, 'pin'),
+                      navigator: () => Navigator.popAndPushNamed(context, 'pin'),
                       future: userProvider.reqPin(_emailController.text)
                     )
                   );
