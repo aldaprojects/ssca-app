@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sockets2/src/providers/grupo_provider.dart';
 import 'package:sockets2/src/providers/usuario_provider.dart';
 import 'package:sockets2/src/routes/routes.dart';
 
@@ -18,7 +19,8 @@ void main() async {
 
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider( create: ( context ) => UsuarioProvider() )
+      ChangeNotifierProvider( create: ( context ) => UsuarioProvider() ),
+      ChangeNotifierProvider( create: ( context ) => GrupoProvider() ),
     ],
     child: MyApp(),
   ));
@@ -27,13 +29,14 @@ void main() async {
 class MyApp extends StatelessWidget {
 
   final prefs = SharedPrefs();
+  
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SSPA',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: prefs.startRoute,
       routes: getApplicationRoutes()
     );
   }

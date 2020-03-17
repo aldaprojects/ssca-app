@@ -17,8 +17,32 @@ class UsuarioProvider with ChangeNotifier{
 
   set user( User user ) {
     this._user = user;
-
     notifyListeners();
+  }
+
+  Map<String, dynamic> getDecodedResp( http.Response resp  ) {
+
+    final Map<String, dynamic> decodedResp = json.decode(resp.body);
+
+    decodedResp['statusCode'] = resp.statusCode;
+
+    return decodedResp;
+
+  }
+
+  Map<String, dynamic> transformUser( http.Response resp ) {
+    User user = new User();
+
+    final decodedResp = getDecodedResp(resp);
+
+    if ( decodedResp['ok'] ) {
+      user = User.fromJson(decodedResp['usuario']);
+      this.user = user;
+      prefs.token = decodedResp['token'];
+      prefs.user = userToJson(user);
+    }
+
+    return decodedResp;
   }
 
   Future<Map<String, dynamic>> login( String email, String password) async {
@@ -28,9 +52,13 @@ class UsuarioProvider with ChangeNotifier{
       'password'          : password
     };
 
-    final resp = await http.post( '$_url/login', body: authData );
+    try {
+      final resp = await http.post( '$_url/login', body: authData );
+      return transformUser(resp);
+    } on Exception catch(e) {
+      return { 'ok': false, 'statusCode': 500 };
+    }
 
-    return transformUser(resp);
   }  
 
   Future<Map<String, dynamic>> singup( User user ) async {
@@ -43,59 +71,49 @@ class UsuarioProvider with ChangeNotifier{
       'fecha_registro' : user.fechaRegistro.toString()
     };
 
-    final resp = await http.post('$_url/usuario', body: authData);
-
-    return transformUser(resp);
-  }
-
-  Map<String, dynamic> transformUser( http.Response resp ) {
-    User user = new User();
-
-    print(resp.body);
-
-    final Map<String, dynamic> decodedResp = json.decode(resp.body);
-
-    if ( decodedResp['ok'] ) {
-      user = User.fromJson(decodedResp['usuario']);
-      this.user = user;
-        prefs.token = decodedResp['token'];
-      prefs.user = userToJson(user);
-
+    try {
+      final resp = await http.post('$_url/usuario', body: authData);
+      return transformUser(resp);
+    }on Exception catch(e) {
+      return { 'ok': false, 'statusCode': 500 };
     }
 
-    return decodedResp;
   }
 
   Future<Map<String, dynamic>> reqPin( String email ) async {
-    final resp = await http.post('$_url/usuario/pin', body: {'email': email});
 
-    final Map<String, dynamic> decodedResp = json.decode(resp.body);
+    try{
+      final resp = await http.post('$_url/usuario/pin', body: {'email': email});
 
-    if ( decodedResp['ok'] ) {
-      prefs.pin = decodedResp['pin'];
+      final decodedResp = getDecodedResp(resp);
+
+      if ( decodedResp['ok'] ) {
+        prefs.pin = decodedResp['pin'];
+      }
+
+      return decodedResp;
+    }on Exception catch(e) {
+      return { 'ok': false, 'statusCode': 500 };
     }
 
-    print('Future ${prefs.pin}');
-
-    return decodedResp;
   }
 
   Future<Map<String, dynamic>> resendEmail( String email ) async {
-    final resp = await http.get('$_url/usuario/u/resend', headers: {'email': email});
-
-    final Map<String, dynamic> decodedResp = json.decode(resp.body);
-
-    return decodedResp;
+    try{
+      final resp = await http.get('$_url/usuario/u/resend', headers: {'email': email});
+      return getDecodedResp(resp);
+    }on Exception catch(e) {
+      return { 'ok': false, 'statusCode': 500 };
+    }
   }
 
   Future<Map<String, dynamic>> updatePassword( String email, String password ) async {
-    final resp = await http.put('$_url/usuario/password?email=$email', body: {'password': password });
-
-    final Map<String, dynamic> decodedResp = json.decode(resp.body);
-
-    print(decodedResp);
-
-    return decodedResp;
+    try{
+      final resp = await http.put('$_url/usuario/password?email=$email', body: {'password': password });
+      return getDecodedResp(resp);
+    }on Exception catch(e) {
+      return { 'ok': false, 'statusCode': 500 };
+    }
   }
 
 }

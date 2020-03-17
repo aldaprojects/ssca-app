@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:sockets2/src/widgets/dialog_widget.dart';
 
 class Pull extends StatelessWidget {
@@ -20,7 +19,10 @@ class Pull extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return FutureBuilder(
-      future: future,
+      future: future.timeout(Duration(seconds: 20),
+      onTimeout: () {
+        return {'ok' : false, 'statusCode' : 408};
+      }),
       builder: ( BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if ( snapshot.hasData ) {
           Map<String, dynamic> data = snapshot.data;
@@ -35,13 +37,27 @@ class Pull extends StatelessWidget {
               press: navigator
             );
           } else {
-            dynamic message = data['err']['errors'];
 
-            if ( !message.containsKey('message') ) {
-              message = 'Hubo un error, revisa bien los campos.';
-            } else {
-              message = data['err']['errors']['message'];
+            if ( data['statusCode'] == 500 ) {
+              return CustomAlertDialog(
+                title: 'Oops!',
+                text: 'Algo anda mal con el servidor, lo sentimos.',
+                image: Image.asset('assets/badserver.png'),
+                primaryColor: Colors.grey,
+                buttonText: 'OK',
+              );
             }
+
+            if ( data['statusCode'] == 408 ) {
+              return CustomAlertDialog(
+                title: 'Tiempo de espera excedido',
+                text: 'Algo anda mal con tu conexión a internet. Si el problema persiste puede ser un error del servidor.',
+                image: Image.asset('assets/network.png'),
+                primaryColor: Colors.grey,
+                buttonText: 'OK',
+              );
+            }
+            dynamic message = data['err']['errors'];
 
             return CustomAlertDialog(
               title: 'OH NO!',
@@ -55,7 +71,7 @@ class Pull extends StatelessWidget {
           }
         } else {
           return CustomAlertDialog(
-            title: 'CARGANDO!',
+            title: 'CARGANDO...',
             text: 'Estamos revisando que todo esté bien.',
             image: Image.asset('assets/loading.png'),
             primaryColor: Color(0xff70AAFB),

@@ -1,43 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:sockets2/src/share_prefs/preferences.dart';
-import 'package:sockets2/src/validators/validators.dart' as loginValidator;
-
-import '../providers/usuario_provider.dart';
 import '../widgets/dialog_widget.dart';
-import '../widgets/pull_widget.dart';
 
+class CustomWidgetPage extends StatefulWidget {
 
-class PasswordPage extends StatefulWidget {
-  _PasswordPageState createState() => _PasswordPageState();
+  final Widget body;
+  final Image image;
+  final String tittle;
+  final String subtittle;
+  final String buttonText;
+  final Function pullFunction;
+  final String aditionalText;
+  final Color aditionalTextColor;
+  final Function backButtonFunction;
+  final Function whenIsValid;
+  final Function onPressedButton;
+  final Widget footerWidget;
+  final bool disableBackButton;
+
+  CustomWidgetPage({
+    @required this.body,
+    @required this.image,
+    @required this.tittle,
+    @required this.subtittle,
+    @required this.buttonText,
+    this.pullFunction,
+    this.backButtonFunction,
+    this.aditionalText,
+    this.aditionalTextColor,
+    this.whenIsValid,
+    this.onPressedButton,
+    this.footerWidget,
+    this.disableBackButton = false
+  });
+
+  @override
+  _CustomWidgetPageState createState() => _CustomWidgetPageState();
 }
 
-class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMixin {
-
-  final TextEditingController _emailController    = TextEditingController();
+class _CustomWidgetPageState extends State<CustomWidgetPage> {
 
   final formKey = GlobalKey<FormState>();
   final prefs = SharedPrefs();
 
-  initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
 
-    final userProvider = Provider.of<UsuarioProvider>(context);
-
     return Scaffold(
-      appBar: AppBar(
+      appBar: widget.disableBackButton
+      ? null
+      : AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.blue),
-          onPressed: () => Navigator.pop(context)
+          onPressed: widget.backButtonFunction == null
+                     ? () => Navigator.pop(context)
+                     : widget.backButtonFunction
         ),
       ),
       backgroundColor: Colors.white,
@@ -46,7 +65,7 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
           children: <Widget>[
             _loginHeader(),
             _loginBody(),
-            _loginFooter(userProvider)
+            _loginFooter(context)
           ],
         ),
       ),
@@ -58,22 +77,31 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
       children: <Widget>[
         Container(
           height: 250,
-          child: Image.asset('assets/forgpwd.png')
+          child: widget.image
         ),
         Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: <Widget>[
               Text(
-                '¿Olvidaste tu contraseña?',
+                widget.tittle,
                 style: TextStyle(fontSize: 25.0),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               Text(
-                  'Introduce el correo asociado con tu cuenta y te enviaremos un código de 4 dígitos que deberás introducir después.',
+                  widget.subtittle,
                   style: TextStyle(fontSize: 15.0, color: Colors.black54),
                   textAlign: TextAlign.center,
               ),
+              widget.aditionalText != null 
+              ?
+              Text(widget.aditionalText,
+                style: TextStyle(
+                  color: widget.aditionalTextColor,
+                  fontSize: 20.0
+                )
+              )
+              : Container()
             ],
           ),
         )
@@ -86,26 +114,12 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
       margin: EdgeInsets.symmetric(horizontal: 30.0),
       child: Form(
         key: formKey,
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: 'Correo',
-                suffixIcon: Icon(FontAwesomeIcons.at)
-              ),
-              validator: loginValidator.validateEmail,
-              autovalidate: true,
-            ),
-            SizedBox(height: 25.0)
-          ],
-        ),
+        child: widget.body
       ),
     );
   }
 
-  Widget _loginFooter( UsuarioProvider userProvider ) {
+  Widget _loginFooter( BuildContext context ) {
     return  Container(
       child: Column(
         children: <Widget>[
@@ -115,18 +129,21 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
             child: Container(
               width: MediaQuery.of(context).size.width * .8,
               child: Text(
-                'Enviar',
+                widget.buttonText,
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
             ),
-            onPressed: () async {
+            onPressed: widget.onPressedButton == null
+            ? () async {
 
               bool isValid = false;
             
               if ( formKey.currentState.validate() ) isValid = true;
 
-              prefs.emailPin = _emailController.text;
+              if ( widget.whenIsValid != null && isValid ) {
+                widget.whenIsValid();
+              }
 
               await showDialog(
                 barrierDismissible: false,
@@ -139,21 +156,23 @@ class _PasswordPageState extends State<PasswordPage> with TickerProviderStateMix
                     ? 
                     CustomAlertDialog(
                       title: 'OH NO!',
-                      text: 'Debe introducir un correo válido.',
+                      text: 'Revisa bien los campos.',
                       image: Image.asset('assets/ohno.png'),
                       primaryColor: Color(0xffE05A61),
                       buttonText: 'OK',
                     )
                     :
-                    Pull(
-                      navigator: () => Navigator.popAndPushNamed(context, 'pin'),
-                      future: userProvider.reqPin(_emailController.text)
-                    )
+                    widget.pullFunction()
                   );
                 }
               );
             }
-          )
+            :
+            widget.onPressedButton
+          ),
+          widget.footerWidget != null
+          ? widget.footerWidget
+          : Container()
         ],
       ),
     );

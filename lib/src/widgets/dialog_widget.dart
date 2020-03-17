@@ -47,7 +47,7 @@ class CustomAlertDialog extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 15.0),
-          height: 90,
+          height: 120,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -60,6 +60,7 @@ class CustomAlertDialog extends StatelessWidget {
                   color: primaryColor
                 ),
               ),
+              SizedBox(height: 15),
               Text(text, style: TextStyle(color: Colors.black87), textAlign: TextAlign.center,)
             ],
           ),

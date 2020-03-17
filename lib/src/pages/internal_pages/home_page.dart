@@ -33,12 +33,14 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        Center(
+        userProvider.user.grupo == null
+        ? Center(
           child: Container(
             padding: EdgeInsets.only(top: 100.0),
             child: SinGrupo()
           ),
         )
+        : Text('Home')
       ],
     );
   }

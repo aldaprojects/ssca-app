@@ -5,71 +5,29 @@ import 'package:provider/provider.dart';
 import 'package:sockets2/src/models/user_model.dart';
 import 'package:sockets2/src/providers/usuario_provider.dart';
 import 'package:sockets2/src/validators/validators.dart' as registerValidator;
-import 'package:sockets2/src/widgets/dialog_widget.dart';
+import 'package:sockets2/src/widgets/customPage_widget.dart';
 import 'package:sockets2/src/widgets/pull_widget.dart';
 
-
-class SingUpPage extends StatefulWidget {
-  _SingUpPageState createState() => _SingUpPageState();
-}
-
-class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
-
+class SingUpPage extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
 
-  TextEditingController _nameController      = TextEditingController();
-  TextEditingController _nickController      = TextEditingController();
-  TextEditingController _emailController     = TextEditingController();
-  TextEditingController _passwordController  = TextEditingController();
-  TextEditingController _passwordController2 = TextEditingController();
-
-  initState() {
-    super.initState();
-  }
+  final TextEditingController _nameController      = TextEditingController();
+  final TextEditingController _nickController      = TextEditingController();
+  final TextEditingController _emailController     = TextEditingController();
+  final TextEditingController _passwordController  = TextEditingController();
+  final TextEditingController _passwordController2 = TextEditingController();
 
   Widget build(BuildContext context) {
 
     final userProvider = Provider.of<UsuarioProvider>(context);
+    User user;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _image(),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 30.0),
-                child: _formBody()
-              ),
-              SizedBox(height: 25.0),
-              _footerRegister(userProvider)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _image() {
-    return Column(
-      children: <Widget>[
-        Container(
-          height: 200,
-          child: Image.asset('assets/relax.png'),
-        ),
-        Text(
-          'No hay prisa',
-          style: TextStyle(color: Colors.grey, fontSize: 15.0))
-      ],
-    );
-  }
-
-  Widget _formBody() {
-    return Form(
-      key: formKey,
-      child: Column(
+    return CustomWidgetPage(
+      disableBackButton: true,
+      image: Image.asset('assets/relax.png'),
+      tittle: 'Crear cuenta',
+      subtittle: 'No hay prisa',
+      body: Column(
         children: <Widget>[
           TextFormField(
             controller: _nameController,
@@ -121,81 +79,40 @@ class _SingUpPageState extends State<SingUpPage> with TickerProviderStateMixin {
               return registerValidator.validateBothPassword(value, _passwordController.text);
             },
             autovalidate: true,
-          )
+          ),
+          SizedBox(height: 20)
         ],
       ),
-    );
-  }
-
-  Widget _footerRegister( UsuarioProvider userProvider ){
-    return Column(
-      children: <Widget>[
-        RaisedButton(
-          color: Colors.blue,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-          child: Container(
-            width: MediaQuery.of(context).size.width * .8,
-            child: Text(
-              'Crear Cuenta',
-              style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          onPressed: () async {
-            User user = new User(
-              name: _nameController.text,
-              username: _nickController.text,
-              email: _emailController.text,
-              password: _passwordController.text,
-              fechaRegistro: DateTime.now()
-            );
-
-            bool isValid = false;
-            
-            if ( formKey.currentState.validate() ) isValid = true;
-
-            await showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                    contentPadding: EdgeInsets.all(0),
-                    content: !isValid
-                    ? 
-                    CustomAlertDialog(
-                      title: 'OH NO!',
-                      text: 'Hubo un error, revisa bien los campos.',
-                      image: Image.asset('assets/ohno.png'),
-                      primaryColor: Color(0xffE05A61),
-                      buttonText: 'OK',
-                    )
-                    :
-                    Pull(
-                      navigator: () {
-                        Navigator.pop(context);
-                        Navigator.popAndPushNamed(context, 'login');
-                      },
-                      future: userProvider.singup(user),
-                      okText: 'Revisa tu correo para que puedas verificar tu cuenta.',
-                    )
-                  );
-                }
-            );
-          }
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('¿Ya tienes cuenta?'),
-            FlatButton(
-              child: Text('Iniciar Sesión', style: TextStyle(color: Colors.blue),),
-              onPressed: () => Navigator.popAndPushNamed(context, 'login'),
-            )
-          ],
-        ),
-      ]
+      whenIsValid: () {
+        user = new User(
+          name: _nameController.text,
+          username: _nickController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+          fechaRegistro: DateTime.now()
+        );
+      },
+      buttonText: 'Crear Cuenta',
+      pullFunction: () {
+        return Pull(
+          navigator: () {
+            Navigator.pop(context);
+            Navigator.popAndPushNamed(context, 'login');
+          },
+          future: userProvider.singup(user),
+          okText: 'Revisa tu correo para que puedas verificar tu cuenta.',
+        );
+      },
+      footerWidget: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('¿Ya tienes cuenta?'),
+          FlatButton(
+            child: Text('Iniciar Sesión', style: TextStyle(color: Colors.blue),),
+            onPressed: () => Navigator.popAndPushNamed(context, 'login'),
+          )
+        ],
+      )
     );
   }
 }
-

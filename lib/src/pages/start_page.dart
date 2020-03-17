@@ -16,7 +16,8 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
   Animation<double> animation2;
   final SharedPrefs prefs = SharedPrefs();
 
-  initState() {
+  @override
+  void initState() {
     super.initState();
     controller = AnimationController(
         duration: Duration(
@@ -39,6 +40,13 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
     );
     controller2.forward();
     prefs.startRoute = '/';
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    controller.stop();
+    controller2.stop();
   }
 
   Widget build(BuildContext context) {

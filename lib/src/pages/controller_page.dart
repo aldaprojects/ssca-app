@@ -24,10 +24,11 @@ class _ControllerPageState extends State<ControllerPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final SharedPrefs prefs = SharedPrefs();
-
+  User user;
   int _indexPage = 0;
 
-  getPage(){
+  getPage( ){
+
     switch (_indexPage) {
       case 0:
         return HomePage();
@@ -50,17 +51,26 @@ class _ControllerPageState extends State<ControllerPage> {
   }
 
   @override
+  void initState(){
+    super.initState();
+    user = User.fromJson(json.decode(prefs.user));
+    prefs.startRoute = 'home';
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final userProvider = Provider.of<UsuarioProvider>(context);
-    // final user = User.fromJson(json.decode(prefs.user));
     // userProvider.user = user;
 
     // // final JwtClaim decClaimSet = verifyJwtHS256Signature(prefs.token, 'seed');
     
     
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
 
+      if ( userProvider.user == null ) {
+        userProvider.user = user;
+      }
 
     //   // add your code here.
     //   // print(decClaimSet.expiry);
@@ -71,10 +81,11 @@ class _ControllerPageState extends State<ControllerPage> {
     //   //   prefs.endToken = true;
     //   //   prefs.startRoute = 'login';
 
-    //   //   Navigator.pushReplacementNamed(context, 'login');
+    //   //   Navigator.popUntil(context, ModalRoute.withName('home'));
+    //   //   Navigator.pop(context);
 
     //   // }
-    // });
+    });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -102,11 +113,11 @@ class _ControllerPageState extends State<ControllerPage> {
               height: 100,
               child: Center(
                 child: ListTile(
-                  title: Text('Aldair Sanchez'),
+                  title: Text(userProvider.user.name),
                   subtitle: Text('Ver perfil'),
                   leading: CircleAvatar(
                     maxRadius: 30,
-                    child: Text('Aldair'[0].toUpperCase(), style: TextStyle(fontSize: 40, color: Colors.white)),
+                    child: Text(userProvider.user.name[0].toUpperCase(), style: TextStyle(fontSize: 40, color: Colors.white)),
                     backgroundColor: Colors.blue,
                   ),
                 ),
@@ -155,7 +166,10 @@ class _ControllerPageState extends State<ControllerPage> {
                   ListTile(
                     leading: Icon(FontAwesomeIcons.signOutAlt),
                     title: Text('Cerrar sesión'),
-                    onTap: () => Navigator.popUntil(context, ModalRoute.withName('/')),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(context, '/');
+                    },
                   ),
                 ],
               ),

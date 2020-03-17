@@ -26,7 +26,7 @@ PreferredSizeWidget appBar( _scaffoldKey ){
               onPressed: (){}
             ),
             Container(
-              child: Center( child: Text('1', style: TextStyle( color: Colors.white, fontSize: 13.0 ),) ),
+              child: Center( child: Text('3', style: TextStyle( color: Colors.white, fontSize: 13.0 ),) ),
               width: 20.0,
               height: 20.0,
               decoration: BoxDecoration(
